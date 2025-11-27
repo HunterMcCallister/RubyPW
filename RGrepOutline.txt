@@ -1,0 +1,17 @@
+first: grab the first and second arguments the user provided in the command line
+
+second: remove any possible quotations marks from the beginning or end of the first argument
+
+third: create a regex variable that contains the first argument as a regex (for Ellis)
+
+fourth: make sure the second argument is a valid file
+
+fifth: create a new File object and assign it to a variable
+
+sixth: read each line of the file until the end of the file is reached
+
+seventh: for each line of the file, use regex to see if the term is in the file line (for Ellis)
+
+eight: if the term is in the file then add it a list of strings that have the term in the file (for Ellis)
+
+ninth: print the list of lines in the file that contain the term
