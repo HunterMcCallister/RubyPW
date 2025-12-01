@@ -263,6 +263,42 @@ else
 end
     </pre>
 
+    <p>To run search, the user must type and enter:</p>
+    <pre>
+ruby search.rb &lt;regex&gt; &lt;filename&gt;
+    </pre>
+    <p>search:</p>
+    <pre>
+search_term = ARGV[0]
+filename = ARGV[1]
+
+search_term = search_term.chomp('"')
+
+re = /#{search_term}/
+
+unless File.exist?(filename) && File.file?(filename)
+  puts "Error: '#{filename}' is not a valid file."
+  exit(1)
+end
+
+file = File.open(filename, 'r')
+
+matching_lines = []
+
+file.each_line do |line|
+  if re.match?(line)
+    matching_lines.push(line)
+  end
+end
+
+file.close
+
+puts "matching lines in the file:"
+
+matching_lines.each do |matching_line|
+  puts matching_line
+end
+    </pre>
     <h2 id="compare">Language Comparison</h2>
     <p>This table compares Ruby with other popular programming languages similar to Ruby - i.e. this table compares Ruby to Python, Javascript, Java, C, and Go. The comparison shows which of a handful of Ruby's features are also featured in the other PLs.</p>
     <table>
