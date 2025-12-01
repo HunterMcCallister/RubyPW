@@ -95,17 +95,268 @@ gem install &lt;package-name&gt;
     </pre>
 
     <h2 id="simple">Simple Programs</h2>
+    <p>To run each of these programs except Sort Numbers, all the user has to do is type and enter: </p>
+    <pre>
+ruby &lt;filename&gt;
+    </pre>
+
+
     <p>Hello World:</p>
 
     <pre>
 puts "Hello, world!"
     </pre>
 
-    <h2 id="complex">More Programs</h2>
-    <p>More complex example program goes here.</p>
+    <p>Print Range:</p>
+
+    <pre>
+print "what is the range of numbers you want printed?\n"
+print "starting number: "
+startingNumber = gets
+print "ending number: "
+endingNumber = gets
+if startingNumber > endingNumber 
+	print "the starting number is greater than the ending number\n"
+else 
+	for i in startingNumber..endingNumber do
+		print i
+	end 
+end
+    </pre>
+
+    <p>To run Sort Numbers the user must type and enter:</p>
+    
+    <pre>
+ruby &lt;filename&gt [number]...
+    </pre>
+
+    <p>Sort Numbers:</p>
+    
+    <pre>
+print "what are the numbers that you want sorted?\n"
+values = gets.split(' ')
+values = values.sort 
+print "here are the numbers sorted: "
+for value in values do
+	print value, " "
+end
+print "\n"
+    </pre>
+
+    <h2 id="complex">More Complex Programs</h2>
+
+    <p>To run Guessing Game, all the user has to do is type and enter: </p>
+    <pre>
+ruby &lt;filename&gt;
+    </pre>
+
+    <p>Guessing Game:</p>
+    <pre>
+value = Integer(rand(100) + 1)
+print "guess of what number I am thinking of between 1-100\n"
+print "guess: "
+guess = Integer(gets)
+
+while 1 
+	if guess > value 
+		print "the guess is greater than the value\n"
+		print "guess: "
+		guess = Integer(gets)
+	elsif guess &lt; value
+		print "the guess is less than the value\n"
+		print "guess: "
+		guess = Integer(gets)
+	else 
+		print "the guess is correct. good job!\n"
+		break;
+	end 
+end
+    </pre>
+
+    <p>To run rcat, the user must type and enter:</p>
+    <pre>
+ruby &lt;filename&gt; &lt;filename of file that will be read&gt;
+    </pre>
+
+    <p>rcat:</p>
+    <pre>
+filename = ARGF.argv[0]
+
+if File.file?(filename) 
+	fileText = IO.read(filename)
+else 
+	print "file does not exist\n"
+end
+
+print fileText
+    </pre>
+
+    <p>To run Sign In Or Log In , the user must follow these steps:</p>
+    <p>Step 1 - Check which version of ruby they are using:</p>
+    <pre>
+ruby -v
+    </pre>
+    <p>Step 2 - Go to <a href="https://rubygems.org/gems/sqlite3">Sqlite3 Gem Install</a> and find the appropriate sqlite3 version for their ruby version</p>
+    <p>Step 3 - Type and run the command:</p>
+    <pre>
+gem install sqlite3 -v 'VERSION'
+    </pre>
+    <p>(where VERSION is the appropriate version of sqlite3 for your version of ruby)</p>
+    <p>Step 4 - Execute Create Table only once by typing and entering:</p>
+    <pre>
+ruby  &lt;filename for Create Table&gt;
+    </pre>
+    <p>Create Table:</p>
+    <pre>
+require "sqlite3"
+
+db = SQLite3::Database.new "values.db"
+
+db.execute("create table userInfo (username varchar(50), password varchar(50))")
+    </pre>
+    <p>Step 5 - Execute Sign In or Log In as many times as you want by typing and entering:</p>
+    <pre>
+ruby  &lt;filename for Log In or Sign In&gt;
+    </pre>
+    <p>Sign In or Log In:</p>
+    <pre>
+require "sqlite3"
+require "digest"
+
+db = SQLite3::Database.new "values.db"
+
+print "sign up or log in?\n"
+print "0 - sign up\n"
+print "1 - log in\n"
+val = Integer(gets)
+
+if val == 0
+	print "username: "
+	username = gets
+	print "password: "
+	password = gets
+	rows = db.execute("select * from userInfo WHERE username=?", [username])
+	alreadySignedUp = false
+	if rows.length == 1 
+		print "this username is already taken\n"
+		alreadySignedUp = true
+	end
+	if !alreadySignedUp
+		hashedPassword = Digest::SHA256.digest password
+		db.execute("INSERT INTO userInfo (username, password) VALUES (?, ?)", [username, hashedPassword])
+		print "signed up!\n"
+	end	
+elsif val == 1
+	print "username: "
+	username = gets
+	print "password: "
+	password = gets
+	hashedPassword = Digest::SHA256.digest password
+	rows = db.execute("select * from userInfo WHERE username=? AND password=?", [username, hashedPassword])
+	if rows.length == 1
+		print "logged in!\n"
+	else
+		print "username or password is incorrect\n"
+	end
+else 
+	print "incorrect input, please either type 0 or 1\n"
+end
+    </pre>
 
     <h2 id="compare">Language Comparison</h2>
-    <p>Compare Ruby to Python, Java, JavaScript, or other languages.</p>
-
+    <p>This table compares Ruby with other popular programming languages similar to Ruby - i.e. this table compares Ruby to Python, Javascript, Java, C, and Go. The comparison shows which of a handful of Ruby's features are also featured in the other PLs.</p>
+    <table>
+        <tr>
+            <th>Programming Language</th>
+            <th>Type Safety</th>
+            <th>Scoping</th>
+            <th>Type Checking</th>
+            <th>Interpreted or Compiled</th>
+            <th>Memory Management</th>
+            <th>Offers the Three OOP Pillars - Encapsulation, Polymorphism, and Inheritance</th>
+            <th>Offers Closures?</th>
+            <th>Offers Default Arguments?</th>
+            <th>Offers Operator Overloading?</th>
+            <th>Offers Exception Handling?</th>
+        </tr>
+        <tr>
+            <th>Ruby    </th>
+            <td>Strongly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Dynamic Type Checking</td>
+            <td>Hybrid - Just-in-time compilation</td>
+            <td>Garbage Collection</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>Python</th>
+            <td>Strongly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Dynamic Type Checking</td>
+            <td>Interpreted</td>
+            <td>Garbage Collection</td>
+            <td>No - object properties can not be "private"</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>Javascript</th>
+            <td>Weakly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Dynamic Type Checking</td>
+            <td>Hybrid - Just-in-time compilation</td>
+            <td>Garbage Collection</td>
+            <td>No Until Recently - JS recently added the feature to make properties private in class</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>Java</th>
+            <td>Strongly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Static Type Checking</td>
+            <td>Hybrid - Just-in-time compilation</td>
+            <td>Garbage Collection</td>
+            <td>Yes</td>
+            <td>No but can be simulated with Objects</td>
+            <td>No</td>
+            <td>No</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>C</th>
+            <td>Weakly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Static Type Checking</td>
+            <td>Compiled</td>
+            <td>User handles dynamic memory so no memory management</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <th>Go</th>
+            <td>Strongly Typed</td>
+            <td>Lexical Scoping</td>
+            <td>Static Type Checking</td>
+            <td>Compiled</td>
+            <td>Garbage Collection</td>
+            <td>No - Can be simulated</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No but uses error return values for error handling</td>
+        </tr>
+    </table>
 </body>
 </html>
